@@ -1,5 +1,5 @@
 # create key from key management system
-resource "aws_kms_key" "TCS-kms" {
+resource "aws_kms_key" "HCS-kms" {
   description = "KMS key "
   policy      = <<EOF
   {
@@ -9,7 +9,7 @@ resource "aws_kms_key" "TCS-kms" {
     {
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
-      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/terraform" },
+      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/hammed" },
       "Action": "kms:*",
       "Resource": "*"
     }
@@ -21,40 +21,42 @@ EOF
 # create key alias
 resource "aws_kms_alias" "alias" {
   name          = "alias/kms"
-  target_key_id = aws_kms_key.TCS-kms.key_id
+  target_key_id = aws_kms_key.HCS-kms.key_id
 }
 
-
 # create Elastic file system
-resource "aws_efs_file_system" "TCS-efs" {
+resource "aws_efs_file_system" "HCS-efs" {
   encrypted  = true
-  kms_key_id = aws_kms_key.TCS-kms.arn
+  kms_key_id = aws_kms_key.HCS-kms.arn
 
-  tags = merge(
+tags = merge(
     var.tags,
     {
-      Name = "TCS-efs"
+      Name = "HCS-file-system"
     },
   )
 }
 
+
 # set first mount target for the EFS 
 resource "aws_efs_mount_target" "subnet-1" {
-  file_system_id  = aws_efs_file_system.TCS-efs.id
+  file_system_id  = aws_efs_file_system.HCS-efs.id
   subnet_id       = var.efs-subnet-1
   security_groups = var.efs-sg
 }
 
+
 # set second mount target for the EFS 
 resource "aws_efs_mount_target" "subnet-2" {
-  file_system_id  = aws_efs_file_system.TCS-efs.id
+  file_system_id  = aws_efs_file_system.HCS-efs.id
   subnet_id       = var.efs-subnet-2
   security_groups = var.efs-sg
 }
 
+
 # create access point for wordpress
 resource "aws_efs_access_point" "wordpress" {
-  file_system_id = aws_efs_file_system.TCS-efs.id
+  file_system_id = aws_efs_file_system.HCS-efs.id
 
   posix_user {
     gid = 0
@@ -74,9 +76,10 @@ resource "aws_efs_access_point" "wordpress" {
 
 }
 
+
 # create access point for tooling
 resource "aws_efs_access_point" "tooling" {
-  file_system_id = aws_efs_file_system.TCS-efs.id
+  file_system_id = aws_efs_file_system.HCS-efs.id
   posix_user {
     gid = 0
     uid = 0

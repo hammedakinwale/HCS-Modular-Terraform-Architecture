@@ -11,6 +11,7 @@ resource "aws_launch_template" "wordpress-launch-template" {
 
   key_name = var.keypair
 
+
   placement {
     availability_zone = "random_shuffle.az_list.result"
   }
@@ -22,17 +23,17 @@ resource "aws_launch_template" "wordpress-launch-template" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = merge(
-      var.tags,
-      {
-        Name = "TCS-wordpress"
-      },
-    )
-
+  tags = merge(
+    var.tags,
+    {
+      Name = "wordpress-launch-template"
+    },
+  )
   }
 
   user_data = filebase64("${path.module}/wordpress.sh")
 }
+
 
 # launch template for toooling
 resource "aws_launch_template" "tooling-launch-template" {
@@ -46,6 +47,7 @@ resource "aws_launch_template" "tooling-launch-template" {
 
   key_name = var.keypair
 
+
   placement {
     availability_zone = "random_shuffle.az_list.result"
   }
@@ -57,13 +59,13 @@ resource "aws_launch_template" "tooling-launch-template" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = merge(
-      var.tags,
-      {
-        Name = "TCS-tooling"
-      },
-    )
 
+ tags = merge(
+    var.tags,
+    {
+      Name = "tooling-launch-template"
+    },
+  )
   }
 
   user_data = filebase64("${path.module}/tooling.sh")

@@ -34,34 +34,30 @@ variable "preferred_number_of_private_subnets" {
 
 variable "name" {
   type    = string
-  default = "TCS"
+  default = "ACS"
 
 }
 
 variable "tags" {
-  description = "A mapping of tags to assign to all resources"
+  description = "A mapping of tags to assign to all resources."
   type        = map(string)
   default     = {}
-
 }
 
 variable "environment" {
   type        = string
-  description = "environment"
-
+  description = "Enviroment"
 }
-
 
 variable "ami" {
   type        = string
-  description = "AMI ID for launch template"
-
+  description = "AMI ID for the launch template"
 }
+
 
 variable "keypair" {
   type        = string
-  description = "keypair  for instances"
-
+  description = "key pair for the instances"
 }
 
 variable "account_no" {

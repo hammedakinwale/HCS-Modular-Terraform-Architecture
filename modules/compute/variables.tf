@@ -7,11 +7,11 @@ variable "ami-jenkins" {
 }
 variable "ami-jfrog" {
     type = string
-    description = "ami for jfrog"
+    description = "ami for jfrob"
 }
 variable "ami-sonar" {
     type = string
-    description = "ami foir sonar"
+    description = "ami for sonar"
 }
 variable "sg-compute" {
     description = "security group for compute instances"

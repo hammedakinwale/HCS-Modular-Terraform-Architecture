@@ -32,7 +32,6 @@ resource "aws_dynamodb_table" "terraform_locks" {
 }
 
 
-
 # creating VPC
 module "VPC" {
   source                              = "./modules/VPC"
@@ -43,14 +42,14 @@ module "VPC" {
   enable_classiclink                  = var.enable_classiclink
   preferred_number_of_public_subnets  = var.preferred_number_of_public_subnets
   preferred_number_of_private_subnets = var.preferred_number_of_private_subnets
-  private_subnets                     = [for i in range(1, 8, 2) : cidrsubnet(var.vpc_cidr, 4, i)]
-  public_subnets                      = [for i in range(2, 5, 2) : cidrsubnet(var.vpc_cidr, 4, i)]
+  private_subnets                     = [for i in range(1, 8, 2) : cidrsubnet(var.vpc_cidr, 8, i)]
+  public_subnets                      = [for i in range(2, 5, 2) : cidrsubnet(var.vpc_cidr, 8, i)]
 }
 
 #Module for Application Load balancer, this will create Extenal Load balancer and internal load balancer
 module "ALB" {
   source             = "./modules/ALB"
-  name               = "TCS-ext-alb"
+  name               = "ACS-ext-alb"
   vpc_id             = module.VPC.vpc_id
   public-sg          = module.security.ALB-sg
   private-sg         = module.security.IALB-sg
@@ -68,7 +67,7 @@ module "security" {
 }
 
 
-module "Autoscaling" {
+module "AutoScaling" {
   source            = "./modules/Autoscaling"
   ami-web           = var.ami
   ami-bastion       = var.ami
@@ -89,6 +88,9 @@ module "Autoscaling" {
 
 }
 
+# Module for Elastic Filesystem; this module will creat elastic file system isn the webservers availablity
+# zone and allow traffic fro the webservers
+
 module "EFS" {
   source       = "./modules/EFS"
   efs-subnet-1 = module.VPC.private_subnets-1
@@ -108,8 +110,8 @@ module "RDS" {
 }
 
 # The Module creates instances for jenkins, sonarqube abd jfrog
-module "compute" {
-  source          = "./modules/compute"
+module "Compute" {
+  source          = "./modules/Compute"
   ami-jenkins     = var.ami
   ami-sonar       = var.ami
   ami-jfrog       = var.ami

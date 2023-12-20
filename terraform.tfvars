@@ -14,23 +14,20 @@ preferred_number_of_public_subnets = 2
 
 preferred_number_of_private_subnets = 4
 
-environment = "Production"
+environment = "dev"
 
+ami = "ami-048d7f5ca8e2edd06"
 
-ami = "ami-0149b2da6ceec4bb0"
+keypair = "Vir"
 
-keypair = "devops"
+master-password = "terraformpbl"
 
-# Ensure to change this to your acccount number
-account_no = "576440278504"
+master-username = "hammed"
 
-master-username = "tony"
-
-master-password = "devopspbl"
-
+account_no = "476683650422"
 
 tags = {
-  Owner-Email     = "akojianthony2@gmail.com"
-  Managed-By      = "terraform"
+  Owner-Email     = "hammedakinwale35@gmail.com"
+  Managed-By      = "Terraform"
   Billing-Account = "1234567890"
-} 
+}

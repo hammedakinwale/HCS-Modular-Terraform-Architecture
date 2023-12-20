@@ -1,3 +1,4 @@
+
 variable "region" {
 }
 
@@ -45,7 +46,7 @@ variable "tags" {
 
 variable "name" {
   type    = string
-  default = "TCS"
+  default = "HCS"
 
 }
 variable "environment" {

@@ -1,5 +1,5 @@
 # create all security groups dynamically
-resource "aws_security_group" "TCS" {
+resource "aws_security_group" "HCS" {
   for_each    = local.security_groups
   name        = each.value.name
   description = each.value.description
@@ -17,6 +17,6 @@ resource "aws_security_group" "TCS" {
     var.tags,
     {
       Name = each.value.name
-    }
+    },
   )
 }
